@@ -8,8 +8,13 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex items-center justify-center bg-blue-500">
-        <img src={favicon} alt="Logo" className="max-w-xs" />
+      <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex flex-col items-center justify-center bg-white">
+        <div className="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500 drop-shadow-lg">
+          <span className="drop-shadow-md bg-white text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500">eq</span>
+        </div>
+        <div className="mt-4 text-lg text-gray-600">
+          <p>Where emotions meet humans!</p>
+        </div>
       </div>
       <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex items-center justify-center">
         <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
