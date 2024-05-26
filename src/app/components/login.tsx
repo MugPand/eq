@@ -1,32 +1,32 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
     }
   };
 
-  const handleSignup = async (e) => {
+  const handleSignup = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       setError('');
       try {
         await createUserWithEmailAndPassword(auth, email, password);
-      } catch (err) {
+      } catch (err: any) {
         setError(err.message);
       }
   };
@@ -46,27 +46,35 @@ const Login = () => {
           <h2 className="text-2xl font-bold text-center text-gray-900">
             {isLogin ? 'Login to Your Account' : 'Create Your Account'}
           </h2>
-          <form className="mt-8 space-y-6">
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          {/* Form with conditional onSubmit handler */}
+          <form className="mt-8 space-y-6" onSubmit={isLogin ? handleLogin : handleSignup}>
             <div className="rounded-md shadow-sm -space-y-px">
               {!isLogin && (
                 <div>
                   <label htmlFor="name" className="sr-only">Full Name</label>
                   <input id="name" name="name" type="text" autoComplete="name" required
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Full Name" />
+                    placeholder="Full Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)} />
                 </div>
               )}
               <div>
                 <label htmlFor="email" className="sr-only">Email address</label>
                 <input id="email" name="email" type="email" autoComplete="email" required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address" />
+                  placeholder="Email address" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div>
                 <label htmlFor="password" className="sr-only">Password</label>
                 <input id="password" name="password" type="password" autoComplete="current-password" required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Password" />
+                  placeholder="Password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)} />
               </div>
             </div>
 
