@@ -38,7 +38,7 @@ const Login = () => {
           <span className="drop-shadow-md bg-white text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500">eq</span>
         </div>
         <div className="mt-4 text-lg text-gray-600">
-          <p>Where emotions meet humans!</p>
+          {/* <p>Where humans meet emotions!</p> */}
         </div>
       </div>
       <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex items-center justify-center">
