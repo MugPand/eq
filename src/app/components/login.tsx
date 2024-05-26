@@ -1,10 +1,35 @@
 "use client";
 
 import React, { useState } from 'react';
-import favicon from '../favicon.ico'; // Ensure this path is correct
+import { auth } from '../../firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleSignup = async (e) => {
+      e.preventDefault();
+      setError('');
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        setError(err.message);
+      }
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
