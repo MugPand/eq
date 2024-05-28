@@ -4,7 +4,11 @@ import React, { FormEvent, useState } from 'react';
 import { auth } from '../../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
-const Login = () => {
+interface LoginCardProps {
+  setAuthenticated: (value: boolean) => void;
+}
+
+const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -16,6 +20,7 @@ const Login = () => {
     setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      setAuthenticated(true);
     } catch (err: any) {
       setError(err.message);
     }
@@ -26,6 +31,8 @@ const Login = () => {
     setError('');
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+
+      setAuthenticated(true);
     } catch (err: any) {
       setError(err.message);
     }
