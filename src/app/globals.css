@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+@media (max-width: 640px) {
+  .border-mobile {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
