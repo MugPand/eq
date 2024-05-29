@@ -1,8 +1,9 @@
 "use client";
 
 import React, { FormEvent, useState } from 'react';
-import { auth } from '../../firebase';
+import { auth, firestore } from '../../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 interface LoginCardProps {
   setAuthenticated: (value: boolean) => void;
@@ -30,7 +31,14 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
     e.preventDefault();
     setError('');
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save additional profile data to Firestore
+      await setDoc(doc(firestore, '/user_data/users', user.uid), {
+        name,
+        email,
+      });
 
       setAuthenticated(true);
     } catch (err: any) {
