@@ -35,7 +35,7 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
       const user = userCredential.user;
 
       // Save additional profile data to Firestore
-      await setDoc(doc(firestore, '/user_data/users', user.uid), {
+      await setDoc(doc(firestore, 'users', user.uid), {
         name,
         email,
       });
