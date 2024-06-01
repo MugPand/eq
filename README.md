@@ -37,10 +37,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 ## TODOs
-- [] Add dashboard
-- [] Add posts database
-- [] Add posting limits
-- [] Add post customizability
-- [] Add feed sorting
-- [] Add post editing
-- [] Add post stats (upvotes, downvotes, comments, etc..)
+- [ ] Add dashboard
+- [ ] Add posts database
+- [ ] Add posting limits
+- [ ] Add post customizability
+- [ ] Add feed sorting
+- [ ] Add post editing
+- [ ] Add post stats (upvotes, downvotes, comments, etc..)
