@@ -40,6 +40,8 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
       await setDoc(doc(firestore, 'users', user.uid), {
         name,
         email,
+        numPosts: 0,
+        numComments: 0,
       });
 
       setAuthenticated(true);
