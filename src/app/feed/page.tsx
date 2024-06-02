@@ -1,7 +1,9 @@
+// pages/Feed.tsx
+
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Post from "./Post";
+import Post from "../components/Post";
 
 const Feed: React.FC = () => {
     const [posts, setPosts] = useState<string[]>([]);

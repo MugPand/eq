@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import Login from "./components/login";
+import Login from './login/page';
 import Navbar from "./components/Navbar";
-import Feed from "./components/Feed";
+import Feed from "./feed/page";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

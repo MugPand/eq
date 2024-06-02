@@ -1,6 +1,6 @@
 import React from "react";
 import Link from 'next/link';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase';
 
@@ -16,15 +16,11 @@ const Navbar: React.FC = () => {
         <nav className="bg-white shadow-md p-4 flex justify-between items-center">
         <div className="text-2xl font-bold text-transparent bg-clip-text"
             style={{ backgroundImage: 'linear-gradient(45deg, white, purple, red)' }}>
-            <Link href='/'>
-                <a>EQ</a>
-            </Link>
+            <Link href='/'>EQ</Link>
         </div>
         <div className="flex items-center">
             <div className="mr-4">
-                <Link href="/dashboard">
-                    <a>Profile</a>
-                </Link>
+                <Link href="/dashboard">Profile</Link>
             </div>
             <div className="relative">
             <select className="border border-gray-300 rounded-md p-2">
