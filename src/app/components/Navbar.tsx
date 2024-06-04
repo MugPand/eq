@@ -2,7 +2,7 @@ import React from "react";
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth } from '../../lib/firebase';
 
 const Navbar: React.FC = () => {
     const router = useRouter();

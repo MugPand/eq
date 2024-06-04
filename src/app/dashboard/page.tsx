@@ -2,7 +2,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { auth, firestore } from '../../firebase';
+import { auth, firestore } from '../../lib/firebase';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/Navbar';
 import { onAuthStateChanged, User } from 'firebase/auth';

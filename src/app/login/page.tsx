@@ -3,7 +3,7 @@
 "use client";
 
 import React, { FormEvent, useState } from 'react';
-import { auth, firestore } from '../../firebase';
+import { auth, firestore } from '../../lib/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
