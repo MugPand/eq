@@ -36,7 +36,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
-## TODOs
+## Feature TODOs
 - [ ] Add dashboard
 - [ ] Add posts database
 - [ ] Add posting limits
@@ -44,3 +44,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - [ ] Add feed sorting
 - [ ] Add post editing
 - [ ] Add post stats (upvotes, downvotes, comments, etc..)
+
+## Bugs TODOs
+- [ ] Login works from root url, not from '/login'
+- [ ] Remember me button not working
+- [ ] Firestore not storing additional user information
