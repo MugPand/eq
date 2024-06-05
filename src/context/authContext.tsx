@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
 import { auth, setAuthPersistence } from '../lib/firebase'; // Adjust the import path as necessary

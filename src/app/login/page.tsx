@@ -1,29 +1,37 @@
-// pages/Login.tsx
+// src/pages/Login.tsx
 
 "use client";
 
 import React, { FormEvent, useState } from 'react';
-import { auth, firestore } from '../../lib/firebase';
+import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { auth, firestore, setAuthPersistence } from '../../lib/firebase';
+import { useAuth } from '../../context/authContext';
 
 interface LoginCardProps {
   setAuthenticated: (value: boolean) => void;
 }
 
 const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
+  const router = useRouter();
+  const { setAuthenticated: setGlobalAuthenticated } = useAuth();
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError('');
     try {
+      await setAuthPersistence(rememberMe);
       await signInWithEmailAndPassword(auth, email, password);
+      setGlobalAuthenticated(true);
       setAuthenticated(true);
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message);
     }
@@ -42,19 +50,22 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
         email,
         numPosts: 0,
         numComments: 0,
+        dateCreated: new Date(),
       });
 
+      await setAuthPersistence(rememberMe);
+      setGlobalAuthenticated(true);
       setAuthenticated(true);
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message);
     }
   };
 
   return (
-
     <div className="flex flex-col min-h-screen bg-gray-100 items-center justify-center p-4">
-      <div className="flex flex-col sm:flex-row items-center justify-center w-full max-w-6xl bg-white rounded-lg shadow-md ">
-        <div className="flex flex-col items-center w-full sm:w-1/2 p-8 border-b border-mobile sm:border-b-0 sm:border-r border-gray-300">
+      <div className="flex flex-col sm:flex-row items-center justify-center w-full max-w-6xl bg-white rounded-lg shadow-md">
+        <div className="flex flex-col items-center w-full sm:w-1/2 p-8 border-b border-gray-300 sm:border-b-0 sm:border-r border-gray-300">
           <div className="text-[5rem] sm:text-[10rem] font-bold text-transparent bg-clip-text drop-shadow-lg">
             <span className="drop-shadow-md bg-white text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500">eq</span>
           </div>
@@ -68,7 +79,6 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
               {isLogin ? 'Login to Your Account' : 'Create Your Account'}
             </h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
-            {/* Form with conditional onSubmit handler */}
             <form className="mt-8 space-y-6" onSubmit={isLogin ? handleLogin : handleSignup}>
               <div className="rounded-md shadow-sm -space-y-px">
                 {!isLogin && (
@@ -102,7 +112,8 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
               {isLogin && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input id="remember_me" name="remember_me" type="checkbox"
+                    <input id="remember_me" name="remember_me" type="checkbox" checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
                     <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
                       Remember me
