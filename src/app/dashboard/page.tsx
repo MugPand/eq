@@ -6,13 +6,14 @@ import { auth, firestore } from '../../lib/firebase';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/Navbar';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { Timestamp } from 'firebase/firestore'; // Import Timestamp
 
 interface UserProfile {
   name: string;
   email: string;
-  // postCount: number;
-  // commentCount: number;
-  // dateCreated: Date,
+  postCount: number;
+  commentCount: number;
+  dateCreated: Date,
 }
 
 const Dashboard: React.FC = () => {
@@ -41,38 +42,40 @@ const Dashboard: React.FC = () => {
         try {
           const userRef = doc(firestore, 'users', user.uid);
           const userDoc = await getDoc(userRef);
-          console.log(user.uid);
           if (userDoc.exists()) {
-            const userData = userDoc.data() as UserProfile;
-            
+            const userData = userDoc.data() as Omit<UserProfile, 'dateCreated'> & { dateCreated: Timestamp };
+
             // Fetch posts count
-            // const postsQuery = query(
-            //   collection(firestore, 'numPosts'),
-            //   where('userId', '==', user.uid)
-            // );
-            // console.log(postsQuery);
-            // const postsSnapshot = await getDocs(postsQuery);
-            // const postCount = postsSnapshot.size;
-            
-            // // Fetch comments count
-            // const commentsQuery = query(
-            //   collection(firestore, 'numComments'),
-            //   where('userId', '==', user.uid)
-            // );
-            // const commentsSnapshot = await getDocs(commentsQuery);
-            // const commentCount = commentsSnapshot.size;
+            const postsQuery = query(
+              collection(firestore, 'posts'),
+              where('userId', '==', user.uid)
+            );
+            const postsSnapshot = await getDocs(postsQuery);
+            const postCount = postsSnapshot.size;
 
-            // Fetch dateCreated
-            // const dateQuery = query(
-            //   collection(firestore, 'dateCreated'),
-            //   where('userId', '==', user.uid)
-            // );
-            // const dateSnapshot = await getDocs(dateQuery);
-            // const date = dateSnapshot.size;
+            // Fetch comments count
+            const commentsQuery = query(
+              collection(firestore, 'comments'),
+              where('userId', '==', user.uid)
+            );
+            const commentsSnapshot = await getDocs(commentsQuery);
+            const commentCount = commentsSnapshot.size;
 
-            setProfile({ ...userData });
+            // Convert Firestore Timestamp to JavaScript Date
+            const dateCreated = userData.dateCreated.toDate();
+
+            setProfile({ 
+              ...userData, 
+              postCount, 
+              commentCount, 
+              dateCreated 
+            });
+          } else {
+            console.error('No such user document!');
+            setError('No user profile found');
           }
         } catch (err) {
+          console.error('Error fetching user profile:', err);
           setError('Failed to fetch user profile');
         }
       }
@@ -100,8 +103,9 @@ const Dashboard: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Statistics</h3>
-                {/* <p><strong>Posts:</strong> {profile.postCount}</p>
-                <p><strong>Comments:</strong> {profile.commentCount}</p> */}
+                <p><strong>Posts:</strong> {profile.postCount}</p>
+                <p><strong>Comments:</strong> {profile.commentCount}</p>
+                <p><strong>Date Created:</strong> {profile.dateCreated.toDateString()}</p>
               </div>
             </>
           ) : (

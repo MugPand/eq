@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
 
     const handleLogout = async () => {
         await signOut(auth);
-        router.push('/login');
+        router.push('/');
     };
 
     return (
@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
                     </>
                 ) : (
                     <button
-                        onClick={() => router.push('/login')}
+                        onClick={() => router.push('/')}
                         className="ml-4 bg-blue-500 text-white px-3 py-2 rounded"
                     >
                         Login
