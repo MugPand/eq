@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import Post from "../components/Post";
+import Navbar from "../components/Navbar";
 
 const Feed: React.FC = () => {
     const [posts, setPosts] = useState<string[]>([]);
@@ -19,11 +20,14 @@ const Feed: React.FC = () => {
     }, []);
 
     return (
+        <>
+        <Navbar/>
         <div className="p-4">
             {posts.map((post, index) => (
                 <Post key={index} content={post} />
             ))}
         </div>
+        </>
     );
 }
 

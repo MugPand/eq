@@ -63,7 +63,7 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 items-center justify-center p-4">
       <div className="flex flex-col sm:flex-row items-center justify-center w-full max-w-6xl bg-white rounded-lg shadow-md">
-        <div className="flex flex-col items-center w-full sm:w-1/2 p-8 border-b border-gray-300 sm:border-b-0 sm:border-r border-gray-300">
+        <div className="flex flex-col items-center w-full sm:w-1/2 p-8 border-b sm:border-b-0 sm:border-r border-gray-300">
           <div className="text-[5rem] sm:text-[10rem] font-bold text-transparent bg-clip-text drop-shadow-lg">
             <span className="drop-shadow-md bg-white text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500">eq</span>
           </div>

@@ -26,6 +26,9 @@ const Navbar: React.FC = () => {
                 <div className="mr-4">
                     <Link href="/dashboard">Profile</Link>
                 </div>
+                <div className="mr-4">
+                    <Link href="/feed">Feed</Link>
+                </div>
                 <div className="relative">
                     <select className="border border-gray-300 rounded-md p-2">
                         <option value="">Select Age Range</option>
