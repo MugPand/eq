@@ -1,5 +1,5 @@
-Welcome to EQ, the internet place for sharing emotions, getting advice, and connecting with humans!
 ![EQ app](logo.png)
+Welcome to EQ, the Internet place for sharing emotions, getting advice, and connecting with humans!
 
 ## Getting Started
 
