@@ -24,11 +24,11 @@ const Navbar: React.FC = () => {
                     style={{ backgroundImage: 'linear-gradient(45deg, white, purple, red)' }}>
                     <Link href='/'>EQ</Link>
                 </div>
-                <div className="md:hidden">
+                <div className="md:hidden flex">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         type="button"
-                        className="text-gray-800 focus:outline-none"
+                        className="text-gray-800 focus:outline-none ml-auto"
                     >
                         <svg
                             className="w-6 h-6"
@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
                         </svg>
                     </button>
                 </div>
-                <div className={`md:flex ${isOpen ? 'block' : 'hidden'} md:items-center space-y-4 md:space-y-0 md:space-x-4`}>
+                <div className={`md:flex transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen' : 'max-h-0 md:max-h-full'} md:items-center space-y-4 md:space-y-0 md:space-x-4 overflow-hidden`}>
                     <Link href="/dashboard" className="block mt-4 md:mt-0 text-gray-800">Profile</Link>
                     <Link href="/feed" className="block mt-4 md:mt-0 text-gray-800">Feed</Link>
                     <div className="relative mt-4 md:mt-0">

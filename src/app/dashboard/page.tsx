@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import Navbar from '../components/Navbar';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { Timestamp } from 'firebase/firestore'; // Import Timestamp
+import CreatePost from '../components/CreatePost';
+import Feed from '../components/Feed';
 
 interface UserProfile {
   name: string;
@@ -64,11 +66,11 @@ const Dashboard: React.FC = () => {
             // Convert Firestore Timestamp to JavaScript Date
             const dateCreated = userData.dateCreated.toDate();
 
-            setProfile({ 
-              ...userData, 
-              postCount, 
-              commentCount, 
-              dateCreated 
+            setProfile({
+              ...userData,
+              postCount,
+              commentCount,
+              dateCreated
             });
           } else {
             console.error('No such user document!');
@@ -91,7 +93,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
           {profile ? (
@@ -106,6 +108,13 @@ const Dashboard: React.FC = () => {
                 <p><strong>Posts:</strong> {profile.postCount}</p>
                 <p><strong>Comments:</strong> {profile.commentCount}</p>
                 <p><strong>Date Created:</strong> {profile.dateCreated.toDateString()}</p>
+              </div>
+              <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+                <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
+                  <h2 className="text-2xl font-bold mb-4">User Dashboard</h2>
+                  <CreatePost />
+                  <Feed />
+                </div>
               </div>
             </>
           ) : (
