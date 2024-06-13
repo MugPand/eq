@@ -1,5 +1,5 @@
 // components/Feed.tsx
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 
@@ -7,29 +7,29 @@ interface Post {
   id: string;
   userId: string;
   content: string;
-  createdAt: Date;
+  createdAt: any;
 }
 
 const Feed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const postsQuery = query(collection(firestore, 'posts'), orderBy('createdAt', 'desc'));
-        const postsSnapshot = await getDocs(postsQuery);
-        const postsData = postsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt.toDate(),
-        } as Post));
+        const q = query(collection(firestore, 'posts'), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const postsData: Post[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          postsData.push({ id: doc.id, ...data } as Post);
+        });
         setPosts(postsData);
-        setLoading(false);
       } catch (err) {
-        setError('Failed to load posts');
-        console.error('Error loading posts:', err);
+        setError('Failed to fetch posts');
+        console.error('Error fetching posts:', err);
+      } finally {
         setLoading(false);
       }
     };
@@ -37,17 +37,21 @@ const Feed: React.FC = () => {
     fetchPosts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div>Loading posts...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="feed">
-      {posts.map(post => (
-        <div key={post.id} className="post">
-          <p>{post.content}</p>
-          <small>{new Date(post.createdAt).toLocaleString()}</small>
-        </div>
-      ))}
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <div key={post.id} className="post">
+            <p>{post.content}</p>
+            <span>{new Date(post.createdAt.seconds * 1000).toLocaleString()}</span>
+          </div>
+        ))
+      ) : (
+        <p>No posts available.</p>
+      )}
     </div>
   );
 };

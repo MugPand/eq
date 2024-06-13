@@ -1,11 +1,11 @@
 // components/CreatePost.tsx
 import { useState } from 'react';
-import { addDoc, collection, Timestamp } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 
 const CreatePost: React.FC = () => {
-  const { user } = useAuth();
+  const { currentUser, loading } = useAuth();
   const [content, setContent] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -13,14 +13,15 @@ const CreatePost: React.FC = () => {
     e.preventDefault();
     setError(null);
 
-    if (!user) {
+    if (loading) return; // Prevent form submission if still loading
+    if (!currentUser) {
       setError('You must be logged in to create a post');
       return;
     }
 
     try {
-      const post: Post = {
-        userId: user.uid,
+      const post = {
+        userId: currentUser.uid,
         content,
         createdAt: new Date(),
       };

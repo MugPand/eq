@@ -1,3 +1,4 @@
+// context/AuthContext.tsx
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -7,6 +8,7 @@ import { auth, setAuthPersistence } from '../lib/firebase'; // Adjust the import
 interface AuthContextType {
   currentUser: FirebaseUser | null;
   isAuthenticated: boolean;
+  loading: boolean;
   setAuthenticated: (value: boolean) => void;
   signOutUser: () => void;
 }
@@ -16,6 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
@@ -31,6 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setCurrentUser(null);
         setIsAuthenticated(false);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -43,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, isAuthenticated, setAuthenticated: setIsAuthenticated, signOutUser }}>
+    <AuthContext.Provider value={{ currentUser, isAuthenticated, loading, setAuthenticated: setIsAuthenticated, signOutUser }}>
       {children}
     </AuthContext.Provider>
   );
