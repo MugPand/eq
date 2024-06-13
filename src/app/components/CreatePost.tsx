@@ -1,6 +1,6 @@
 // components/CreatePost.tsx
 import { useState } from 'react';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 
@@ -23,7 +23,7 @@ const CreatePost: React.FC = () => {
       const post = {
         userId: currentUser.uid,
         content,
-        createdAt: new Date(),
+        createdAt: Timestamp.fromDate(new Date()),
       };
 
       await addDoc(collection(firestore, 'posts'), post);

@@ -1,6 +1,6 @@
 // components/Feed.tsx
 import { useState, useEffect } from 'react';
-import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 
 interface Post {
@@ -16,25 +16,23 @@ const Feed: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const q = query(collection(firestore, 'posts'), orderBy('createdAt', 'desc'));
-        const querySnapshot = await getDocs(q);
-        const postsData: Post[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          postsData.push({ id: doc.id, ...data } as Post);
-        });
-        setPosts(postsData);
-      } catch (err) {
-        setError('Failed to fetch posts');
-        console.error('Error fetching posts:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const q = query(collection(firestore, 'posts'), orderBy('createdAt', 'desc'));
 
-    fetchPosts();
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postsData: Post[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        postsData.push({ id: doc.id, ...data } as Post);
+      });
+      setPosts(postsData);
+      setLoading(false);
+    }, (err) => {
+      setError('Failed to fetch posts');
+      console.error('Error fetching posts:', err);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   if (loading) return <div>Loading posts...</div>;
