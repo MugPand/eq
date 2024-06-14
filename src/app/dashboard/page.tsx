@@ -2,7 +2,6 @@
 "use client";
 
 import Navbar from '../components/Navbar';
-import CreatePost from '../components/CreatePost';
 import Feed from '../components/Feed';
 import { useAuth } from '../../context/authContext';
 
