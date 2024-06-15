@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, updateDoc, doc, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 interface Comment {
     id: string;
@@ -123,6 +125,10 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
         }
     };
 
+    const calculateNetLikes = (likes: number, dislikes: number) => {
+        return likes - dislikes;
+    };
+
     return (
         <div className="mt-4">
             <form onSubmit={handleNewComment} className="mb-4">
@@ -142,11 +148,14 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
                         <p className="text-gray-800">{comment.content}</p>
                         <div className="flex justify-between items-center mt-2">
                             <div>
-                                <button onClick={() => handleLikeComment(comment.id)} className="mr-2 text-blue-500">
-                                    {comment.likedBy?.includes(currentUser?.uid || '') ? 'Unlike' : 'Like'} {comment.likes}
+                                <button onClick={() => handleLikeComment(comment.id)} className={`mr-2 ${comment.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faThumbsUp} />
                                 </button>
-                                <button onClick={() => handleDislikeComment(comment.id)} className="text-red-500">
-                                    {comment.dislikedBy?.includes(currentUser?.uid || '') ? 'Undislike' : 'Dislike'} {comment.dislikes}
+                                <span className={`mx-2 ${calculateNetLikes(comment.likes, comment.dislikes) > 0 ? 'text-blue-500' : calculateNetLikes(comment.likes, comment.dislikes) < 0 ? 'text-red-500' : 'text-gray-500'}`}>
+                                    {calculateNetLikes(comment.likes, comment.dislikes)}
+                                </span>
+                                <button onClick={() => handleDislikeComment(comment.id)} className={`ml-2 ${comment.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faThumbsDown} />
                                 </button>
                             </div>
                         </div>

@@ -15,6 +15,9 @@ import {
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 import CommentSection from './CommentSection'; // Import the CommentSection component
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+
 
 interface Post {
     id: string;
@@ -153,6 +156,10 @@ const Feed: React.FC = () => {
         }
     };
 
+    const calculateNetLikes = (likes: number, dislikes: number) => {
+        return likes - dislikes;
+    };
+
     return (
         <div className="feed">
             <div className="create-post mb-6">
@@ -176,11 +183,14 @@ const Feed: React.FC = () => {
                         <p className="text-gray-800">{post.content}</p>
                         <div className="flex justify-between items-center mt-2">
                             <div>
-                                <button onClick={() => handleLike(post.id)} className="mr-2 text-blue-500">
-                                    {post.likedBy?.includes(currentUser?.uid || '') ? 'Unlike' : 'Like'} {post.likes}
+                                <button onClick={() => handleLike(post.id)} className={`mr-2 ${post.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faThumbsUp} />
                                 </button>
-                                <button onClick={() => handleDislike(post.id)} className="text-red-500">
-                                    {post.dislikedBy?.includes(currentUser?.uid || '') ? 'Undislike' : 'Dislike'} {post.dislikes}
+                                <span className={`mx-2 ${calculateNetLikes(post.likes, post.dislikes) > 0 ? 'text-blue-500' : calculateNetLikes(post.likes, post.dislikes) < 0 ? 'text-red-500' : 'text-gray-500'}`}>
+                                    {calculateNetLikes(post.likes, post.dislikes)}
+                                </span>
+                                <button onClick={() => handleDislike(post.id)} className={`ml-2 ${post.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faThumbsDown} />
                                 </button>
                             </div>
                         </div>
