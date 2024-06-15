@@ -35,34 +35,36 @@ const Feed: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [newPostContent, setNewPostContent] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [sortOption, setSortOption] = useState('mostRecent');
 
-    useEffect(() => {
-        const q = query(collection(firestore, 'posts'), orderBy('createdAt', 'desc'));
-
+    const fetchPosts = (sortOption: string) => {
+        let q;
+    
+        if (sortOption === 'mostLikes') {
+          q = query(collection(firestore, 'posts'), orderBy('likes', 'desc'));
+        } else {
+          q = query(collection(firestore, 'posts'), orderBy('createdAt', 'desc'));
+        }
+    
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const postsData: Post[] = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const post: Post = {
-                    id: doc.id,
-                    userId: data.userId,
-                    content: data.content,
-                    createdAt: data.createdAt,
-                    likes: data.likes || 0,
-                    dislikes: data.dislikes || 0,
-                    likedBy: data.likedBy || [],
-                    dislikedBy: data.dislikedBy || []
-                };
-                postsData.push(post);
-            });
-            setPosts(postsData);
+          const postsData: Post[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            postsData.push({ id: doc.id, ...data } as Post);
+          });
+          setPosts(postsData);
         }, (err) => {
-            setError('Failed to fetch posts');
-            console.error('Error fetching posts:', err);
+          console.error('Error fetching posts:', err);
         });
-
+    
+        return unsubscribe;
+      };
+    
+      useEffect(() => {
+        const unsubscribe = fetchPosts(sortOption);
         return () => unsubscribe();
-    }, []);
+      }, [sortOption]);
+    
 
     const handleLike = async (postId: string) => {
         if (!currentUser) return;
@@ -162,6 +164,18 @@ const Feed: React.FC = () => {
 
     return (
         <div className="feed">
+            <div className="sort-options mb-4">
+                <label htmlFor="sort" className="mr-2">Sort by:</label>
+                <select
+                    id="sort"
+                    value={sortOption}
+                    onChange={(e) => setSortOption(e.target.value)}
+                    className="border border-gray-300 p-2 rounded-md"
+                >
+                    <option value="mostRecent">Most Recent</option>
+                    <option value="mostLikes">Most Likes</option>
+                </select>
+            </div>
             <div className="create-post mb-6">
                 <form onSubmit={handleNewPost} className="bg-white p-4 rounded-lg shadow-md">
                     <textarea
