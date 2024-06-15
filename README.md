@@ -19,12 +19,13 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Feature TODOs
 - [x] Add dashboard
-- [ ] Add posts database
+- [x] Add posts database
 - [ ] Add posting limits
 - [ ] Add post customizability
-- [ ] Add feed sorting
+- [x] Add feed sorting
 - [ ] Add post editing
-- [ ] Add post stats (upvotes, downvotes, comments, etc..)
+- [x] Add post stats (upvotes, downvotes, comments, etc..)
+- [ ] Add usernames -> display them on posts & comments
 
 ## Bugs TODOs
 - [ ] Login works from root url, not from '/login'
