@@ -14,22 +14,6 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar />
       <div className="flex flex-1">
-        <aside className="w-64 bg-white p-6 shadow-md">
-          <h2 className="text-2xl font-bold mb-4">User Dashboard</h2>
-          <nav>
-            <ul>
-              <li className="mb-2">
-                <a href="#" className="text-gray-700 hover:text-gray-900">Home</a>
-              </li>
-              <li className="mb-2">
-                <a href="#" className="text-gray-700 hover:text-gray-900">Profile</a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-700 hover:text-gray-900">Settings</a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
         <main className="flex-1 p-6">
           <div className="max-w-2xl mx-auto">
             <Feed />
