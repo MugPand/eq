@@ -1,10 +1,9 @@
-// components/CommentSection.tsx
 import { useState, useEffect } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, updateDoc, doc, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faThumbsDown, faComments } from '@fortawesome/free-solid-svg-icons';
 
 interface Comment {
     id: string;
@@ -22,11 +21,12 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [showComments, setShowComments] = useState(false);
 
     useEffect(() => {
         const q = query(
             collection(firestore, 'posts', postId, 'comments'),
-            orderBy('likes', 'desc')
+            orderBy('createdAt', 'desc')
         );
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -40,7 +40,7 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
             console.error('Error fetching comments:', err);
         });
 
-        return () => unsubscribe();
+        return unsubscribe;
     }, [postId]);
 
     const handleNewComment = async (e: React.FormEvent) => {
@@ -48,7 +48,7 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
         setError(null);
 
         if (!currentUser) {
-            setError('You must be logged in to comment');
+            setError('You must be logged in to add a comment');
             return;
         }
 
@@ -66,8 +66,8 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
             await addDoc(collection(firestore, 'posts', postId, 'comments'), comment);
             setNewComment('');
         } catch (err) {
-            setError('Failed to post comment');
-            console.error('Error posting comment:', err);
+            setError('Failed to add comment');
+            console.error('Error adding comment:', err);
         }
     };
 
@@ -77,8 +77,8 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
         const commentRef = doc(firestore, 'posts', postId, 'comments', commentId);
         const commentDoc = await getDoc(commentRef);
         const commentData = commentDoc.data() as Comment;
-        const alreadyLiked = commentData.likedBy?.includes(currentUser.uid);
-        const alreadyDisliked = commentData.dislikedBy?.includes(currentUser.uid);
+        const alreadyLiked = commentData.likedBy.includes(currentUser.uid);
+        const alreadyDisliked = commentData.dislikedBy.includes(currentUser.uid);
 
         if (alreadyLiked) {
             await updateDoc(commentRef, {
@@ -104,8 +104,8 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
         const commentRef = doc(firestore, 'posts', postId, 'comments', commentId);
         const commentDoc = await getDoc(commentRef);
         const commentData = commentDoc.data() as Comment;
-        const alreadyDisliked = commentData.dislikedBy?.includes(currentUser.uid);
-        const alreadyLiked = commentData.likedBy?.includes(currentUser.uid);
+        const alreadyDisliked = commentData.dislikedBy.includes(currentUser.uid);
+        const alreadyLiked = commentData.likedBy.includes(currentUser.uid);
 
         if (alreadyDisliked) {
             await updateDoc(commentRef, {
@@ -130,38 +130,46 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
     };
 
     return (
-        <div className="mt-4">
-            <form onSubmit={handleNewComment} className="mb-4">
-                <textarea
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Write a comment..."
-                    required
-                />
-                <button type="submit" className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Comment</button>
-            </form>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <div className="comments">
-                {comments.map((comment) => (
-                    <div key={comment.id} className="bg-gray-100 p-3 rounded-lg mb-2">
-                        <p className="text-gray-800">{comment.content}</p>
+        <div className="comment-section">
+            <button onClick={() => setShowComments(!showComments)} className="text-blue-500 hover:underline">
+                <FontAwesomeIcon icon={faComments} className="mr-2" />
+                {showComments ? 'Hide Comments' : 'Show Comments'}
+            </button>
+            {showComments && (
+                <>
+                    <form onSubmit={handleNewComment} className="bg-white p-2 rounded-lg shadow-md mt-2">
+                        <textarea
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Write your comment..."
+                            required
+                        />
                         <div className="flex justify-between items-center mt-2">
-                            <div>
-                                <button onClick={() => handleLikeComment(comment.id)} className={`mr-2 ${comment.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
-                                    <FontAwesomeIcon icon={faThumbsUp} />
-                                </button>
-                                <span className={`mx-2 ${calculateNetLikes(comment.likes, comment.dislikes) > 0 ? 'text-blue-500' : calculateNetLikes(comment.likes, comment.dislikes) < 0 ? 'text-red-500' : 'text-gray-500'}`}>
-                                    {calculateNetLikes(comment.likes, comment.dislikes)}
-                                </span>
-                                <button onClick={() => handleDislikeComment(comment.id)} className={`ml-2 ${comment.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
-                                    <FontAwesomeIcon icon={faThumbsDown} />
-                                </button>
+                            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Comment</button>
+                            {error && <p className="text-red-500 text-sm">{error}</p>}
+                        </div>
+                    </form>
+                    {comments.map((comment) => (
+                        <div key={comment.id} className="bg-gray-100 p-2 rounded-lg shadow-md mt-2">
+                            <p className="text-gray-800">{comment.content}</p>
+                            <div className="flex justify-between items-center mt-2">
+                                <div className="flex items-center">
+                                    <button onClick={() => handleLikeComment(comment.id)} className={`mr-2 ${comment.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
+                                        <FontAwesomeIcon icon={faThumbsUp} />
+                                    </button>
+                                    <span className={`mx-2 ${calculateNetLikes(comment.likes, comment.dislikes) > 0 ? 'text-blue-500' : calculateNetLikes(comment.likes, comment.dislikes) < 0 ? 'text-red-500' : 'text-gray-500'}`}>
+                                        {calculateNetLikes(comment.likes, comment.dislikes)}
+                                    </span>
+                                    <button onClick={() => handleDislikeComment(comment.id)} className={`ml-2 ${comment.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
+                                        <FontAwesomeIcon icon={faThumbsDown} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </>
+            )}
         </div>
     );
 };
