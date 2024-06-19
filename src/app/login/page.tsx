@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, firestore, setAuthPersistence } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
+import RandomItem from '../components/RandomItem';
 
 interface LoginCardProps {
   setAuthenticated: (value: boolean) => void;
@@ -68,7 +69,8 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
             <span className="drop-shadow-md bg-white text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500">eq</span>
           </div>
           <div className="mt-4 text-lg text-gray-600">
-            <p>Where emotions meet humans!</p>
+            {/* <p>Where emotions meet humans!</p> */}
+            <RandomItem></RandomItem>
           </div>
         </div>
         <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex items-center justify-center">
