@@ -3,7 +3,7 @@ import { collection, query, orderBy, onSnapshot, addDoc, Timestamp, doc, getDoc,
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown, faComments } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import CommentSection from './CommentSection';
 
 interface Post {
@@ -139,7 +139,7 @@ const Feed: React.FC = () => {
   };
 
   return (
-    <div className="feed">
+    <div className="feed pt-16"> {/* Add padding-top to create space for the fixed navbar */}
       <div className="sort-options mb-4">
         <label htmlFor="sort" className="mr-2">Sort by:</label>
         <select
@@ -182,7 +182,6 @@ const Feed: React.FC = () => {
             </div>
           </div>
           <CommentSection postId={post.id} />
-
         </div>
       ))}
     </div>

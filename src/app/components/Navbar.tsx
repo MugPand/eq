@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     };
 
     return (
-        <nav className="bg-white shadow-md p-4">
+        <nav className="bg-white shadow-md p-4 fixed top-0 w-full z-50">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="text-2xl font-bold text-transparent bg-clip-text"
                     style={{ backgroundImage: 'linear-gradient(45deg, white, purple, red)' }}>
