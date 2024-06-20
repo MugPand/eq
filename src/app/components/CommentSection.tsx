@@ -137,9 +137,9 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
             </button>
             {showComments && (
                 <>
-                    <form onSubmit={handleNewComment} className="bg-white p-2 rounded-lg shadow-md mt-2">
+                    <form onSubmit={handleNewComment} className="bg-gray-100 p-2 rounded-lg shadow-md mt-2">
                         <textarea
-                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                            className="w-full p-2 border border-gray-300 rounded-md  focus:outline-none focus:ring focus:border-blue-300"
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                             placeholder="Write your comment..."

@@ -166,7 +166,7 @@ const Feed: React.FC = () => {
         </div>
       </form>
       {posts.map((post) => (
-        <div key={post.id} className="bg-gray-100 p-4 rounded-lg shadow-md mb-6">
+        <div key={post.id} className="bg-white p-4 rounded-lg shadow-md mb-6">
           <p className="text-gray-800">{post.content}</p>
           <div className="flex justify-between items-center mt-2">
             <div className="flex items-center">
