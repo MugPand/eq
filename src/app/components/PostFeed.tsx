@@ -10,7 +10,7 @@ interface Post {
   id: string;
   userId: string;
   content: string;
-  createdAt: any;
+  createdAt: Timestamp;
   likes: number;
   dislikes: number;
   likedBy: string[];
@@ -167,6 +167,7 @@ const PostFeed: React.FC = () => {
       </form>
       {posts.map((post) => (
         <div key={post.id} className="bg-white p-4 rounded-lg shadow-md mb-6">
+          <p>{post.userId} | {post.createdAt.toDate().toLocaleString()}</p>
           <p className="text-gray-800">{post.content}</p>
           <div className="flex justify-between items-center mt-2">
             <div className="flex items-center">

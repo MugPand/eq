@@ -152,6 +152,7 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
                     </form>
                     {comments.map((comment) => (
                         <div key={comment.id} className="bg-gray-100 p-2 rounded-lg shadow-md mt-2">
+                            <p>{comment.userId} | {comment.createdAt.toDate().toLocaleString()} </p>
                             <p className="text-gray-800">{comment.content}</p>
                             <div className="flex justify-between items-center mt-2">
                                 <div className="flex items-center">
