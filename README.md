@@ -26,6 +26,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 - [ ] Add post editing
 - [x] Add post stats (upvotes, downvotes, comments, etc..)
 - [ ] Add usernames -> display them on posts & comments
+- [ ] Add timestamps
 
 ## Bugs TODOs
 - [ ] Login works from root url, not from '/login'
