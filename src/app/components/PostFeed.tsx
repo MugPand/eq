@@ -17,7 +17,7 @@ interface Post {
   dislikedBy: string[];
 }
 
-const Feed: React.FC = () => {
+const PostFeed: React.FC = () => {
   const { currentUser } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPost, setNewPost] = useState('');
@@ -188,4 +188,4 @@ const Feed: React.FC = () => {
   );
 };
 
-export default Feed;
+export default PostFeed;

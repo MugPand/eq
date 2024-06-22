@@ -1,11 +1,10 @@
-// pages/Dashboard.tsx
+// pages/Profile.tsx
 "use client";
 
 import Navbar from '../components/Navbar';
-import Feed from '../components/Feed';
 import { useAuth } from '../../context/authContext';
 
-const Dashboard: React.FC = () => {
+const Profile: React.FC = () => {
   const { loading } = useAuth();
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -16,7 +15,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-1">
         <main className="flex-1 p-6">
           <div className="max-w-2xl mx-auto">
-            <Feed />
+            THIS IS A TEST DASHBOARD!
           </div>
         </main>
       </div>
@@ -24,4 +23,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default Profile;

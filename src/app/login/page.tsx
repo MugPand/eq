@@ -30,7 +30,7 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
       await signInWithEmailAndPassword(auth, email, password);
       setGlobalAuthenticated(true);
       setAuthenticated(true);
-      router.push('/dashboard');
+      router.push('/feed');
     } catch (err: any) {
       setError(err.message);
     }
@@ -55,7 +55,7 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
       await setAuthPersistence(rememberMe);
       setGlobalAuthenticated(true);
       setAuthenticated(true);
-      router.push('/dashboard');
+      router.push('/feed');
     } catch (err: any) {
       setError(err.message);
     }

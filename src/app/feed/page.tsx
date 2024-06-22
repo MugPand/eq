@@ -1,35 +1,27 @@
 // pages/Feed.tsx
-
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Post from "../components/Post";
-import Navbar from "../components/Navbar";
+import Navbar from '../components/Navbar';
+import PostFeed from '../components/PostFeed';
+import { useAuth } from '../../context/authContext';
 
 const Feed: React.FC = () => {
-    const [posts, setPosts] = useState<string[]>([]);
+  const { loading } = useAuth();
 
-    useEffect(() => {
-        // simulates fetching posts from an API
-        const fetchedPosts = [
-            "Post 1 content...",
-            "Post 2 content...",
-            "Post 3 content...",
-        ];
-        setPosts(fetchedPosts);
-    }, []);
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
-    return (
-        <>
-        <Navbar/>
-        <div className="p-4">
-            {posts.map((post, index) => (
-                <Post key={index} content={post} />
-            ))}
-        </div>
-        </>
-    );
-}
-
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <Navbar />
+      <div className="flex flex-1">
+        <main className="flex-1 p-6">
+          <div className="max-w-2xl mx-auto">
+            <PostFeed />
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
 
 export default Feed;
