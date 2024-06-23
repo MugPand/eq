@@ -131,7 +131,7 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
 
     return (
         <div className="comment-section">
-            <button onClick={() => setShowComments(!showComments)} className="text-blue-500 hover:underline">
+            <button onClick={() => setShowComments(!showComments)} className="text-sm text-blue-500 hover:underline">
                 <FontAwesomeIcon icon={faComments} className="mr-2" />
                 {showComments ? 'Hide Comments' : 'Show Comments'}
             </button>
@@ -152,17 +152,17 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
                     </form>
                     {comments.map((comment) => (
                         <div key={comment.id} className="bg-gray-100 p-2 rounded-lg shadow-md mt-2">
-                            <p>{comment.userId} | {comment.createdAt.toDate().toLocaleString()} </p>
-                            <p className="text-gray-800">{comment.content}</p>
-                            <div className="flex justify-between items-center mt-2">
+                            <p className="text-xs">{comment.userId} | {comment.createdAt.toDate().toLocaleString()} </p>
+                            <p className="pt-2 text-gray-800">{comment.content}</p>
+                            <div className="text-sm flex justify-between items-center mt-2">
                                 <div className="flex items-center">
-                                    <button onClick={() => handleLikeComment(comment.id)} className={`mr-2 ${comment.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
+                                    <button onClick={() => handleLikeComment(comment.id)} className={`mr-1 ${comment.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
                                         <FontAwesomeIcon icon={faThumbsUp} />
                                     </button>
                                     <span className={`mx-2 ${calculateNetLikes(comment.likes, comment.dislikes) > 0 ? 'text-blue-500' : calculateNetLikes(comment.likes, comment.dislikes) < 0 ? 'text-red-500' : 'text-gray-500'}`}>
                                         {calculateNetLikes(comment.likes, comment.dislikes)}
                                     </span>
-                                    <button onClick={() => handleDislikeComment(comment.id)} className={`ml-2 ${comment.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
+                                    <button onClick={() => handleDislikeComment(comment.id)} className={`ml-1 ${comment.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
                                         <FontAwesomeIcon icon={faThumbsDown} />
                                     </button>
                                 </div>

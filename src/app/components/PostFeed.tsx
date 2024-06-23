@@ -167,17 +167,17 @@ const PostFeed: React.FC = () => {
       </form>
       {posts.map((post) => (
         <div key={post.id} className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <p>{post.userId} | {post.createdAt.toDate().toLocaleString()}</p>
-          <p className="text-gray-800">{post.content}</p>
-          <div className="flex justify-between items-center mt-2">
+          <p className="text-xs">{post.userId} | {post.createdAt.toDate().toLocaleString()}</p>
+          <p className="pt-2 text-gray-800">{post.content}</p>
+          <div className="text-sm flex justify-between items-center mt-2 mb-2">
             <div className="flex items-center">
-              <button onClick={() => handleLikePost(post.id)} className={`mr-2 ${post.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
+              <button onClick={() => handleLikePost(post.id)} className={`mr-1 ${post.likedBy.includes(currentUser?.uid || '') ? 'text-blue-500' : 'text-gray-500'}`}>
                 <FontAwesomeIcon icon={faThumbsUp} />
               </button>
               <span className={`mx-2 ${calculateNetLikes(post.likes, post.dislikes) > 0 ? 'text-blue-500' : calculateNetLikes(post.likes, post.dislikes) < 0 ? 'text-red-500' : 'text-gray-500'}`}>
                 {calculateNetLikes(post.likes, post.dislikes)}
               </span>
-              <button onClick={() => handleDislikePost(post.id)} className={`ml-2 ${post.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
+              <button onClick={() => handleDislikePost(post.id)} className={`ml-1 ${post.dislikedBy.includes(currentUser?.uid || '') ? 'text-red-500' : 'text-gray-500'}`}>
                 <FontAwesomeIcon icon={faThumbsDown} />
               </button>
             </div>
