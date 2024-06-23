@@ -3,7 +3,7 @@
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, firestore, setAuthPersistence } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 import RandomItem from '../components/RandomItem';
@@ -16,18 +16,36 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
   const router = useRouter();
   const { setAuthenticated: setGlobalAuthenticated } = useAuth();
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [name, setName] = useState<string>('');
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  const validateUsername = (username: string): boolean => {
+    const regex = /^[a-zA-Z0-9._-]{5,15}$/;
+    return regex.test(username);
+  };
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError('');
     try {
       await setAuthPersistence(rememberMe);
-      await signInWithEmailAndPassword(auth, email, password);
+
+      // Check if the input is an email or username
+      if (username.includes('@')) {
+        await signInWithEmailAndPassword(auth, username, password);
+      } else {
+        // Get user by username
+        const userSnapshot = await getDoc(doc(firestore, 'usernames', username));
+        if (!userSnapshot.exists()) {
+          throw new Error('Invalid username or password');
+        }
+        const userEmail = userSnapshot.data().email;
+        await signInWithEmailAndPassword(auth, userEmail, password);
+      }
+
       setGlobalAuthenticated(true);
       setAuthenticated(true);
       router.push('/feed');
@@ -40,16 +58,30 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
     e.preventDefault();
     setError('');
     try {
+      // Check if username is unique and valid
+      if (!validateUsername(username)) {
+        throw new Error('Username must be 5-15 characters long and can only contain letters, numbers, ".", "-", and "_".');
+      }
+      const usernameSnapshot = await getDoc(doc(firestore, 'usernames', username));
+      if (usernameSnapshot.exists()) {
+        throw new Error('Username is already taken.');
+      }
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       // Save additional profile data to Firestore
       await setDoc(doc(firestore, 'users', user.uid), {
-        name,
+        username,
         email,
         numPosts: 0,
         numComments: 0,
         dateCreated: new Date(),
+      });
+
+      // Save the username to a separate collection for uniqueness check
+      await setDoc(doc(firestore, 'usernames', username), {
+        email,
       });
 
       await setAuthPersistence(rememberMe);
@@ -69,36 +101,36 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
             <span className="drop-shadow-md bg-white text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-400 to-red-500">eq</span>
           </div>
           <div className="mt-4 text-lg text-gray-600">
-            {/* <p>Where emotions meet humans!</p> */}
             <RandomItem></RandomItem>
           </div>
         </div>
         <div className="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 flex items-center justify-center">
-          <div className="m-8 w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+          <div className="m-8 w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md" style={{ minHeight: '370px' }}>
             <h2 className="text-2xl font-bold text-center text-gray-900">
               {isLogin ? 'Login to Your Account' : 'Create Your Account'}
             </h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
             <form className="mt-8 space-y-6" onSubmit={isLogin ? handleLogin : handleSignup}>
               <div className="rounded-md shadow-sm -space-y-px">
+                <div>
+                  <label htmlFor={isLogin ? "usernameOrEmail" : "email"} className="sr-only">{isLogin ? "Username or Email" : "Email Address"}</label>
+                  <input id={isLogin ? "usernameOrEmail" : "email"} name={isLogin ? "usernameOrEmail" : "email"} type={isLogin ? "text" : "email"} autoComplete={isLogin ? "username" : "email"} required
+                    className="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder={isLogin ? "Username or Email" : "Email Address"}
+                    value={isLogin ? username : email}
+                    onChange={(e) => isLogin ? setUsername(e.target.value) : setEmail(e.target.value)} />
+                </div>
                 {!isLogin && (
                   <div>
-                    <label htmlFor="name" className="sr-only">Full Name</label>
-                    <input id="name" name="name" type="text" autoComplete="name" required
-                      className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Full Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)} />
+                    <label htmlFor="username" className="sr-only">Username</label>
+                    <input id="username" name="username" type="text" autoComplete="username" required
+                      pattern="^[a-zA-Z0-9._-]{5,15}$"
+                      className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)} />
                   </div>
                 )}
-                <div>
-                  <label htmlFor="email" className="sr-only">Email address</label>
-                  <input id="email" name="email" type="email" autoComplete="email" required
-                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)} />
-                </div>
                 <div>
                   <label htmlFor="password" className="sr-only">Password</label>
                   <input id="password" name="password" type="password" autoComplete="current-password" required
@@ -108,7 +140,6 @@ const Login: React.FC<LoginCardProps> = ({ setAuthenticated }) => {
                     onChange={(e) => setPassword(e.target.value)} />
                 </div>
               </div>
-
               {isLogin && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
