@@ -59,13 +59,13 @@ const Profile: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  // if (error) {
+  //   return <div>{error}</div>;
+  // }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
