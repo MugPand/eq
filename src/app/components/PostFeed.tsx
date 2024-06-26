@@ -17,6 +17,15 @@ interface Post {
   dislikedBy: string[];
 }
 
+interface User {
+  dateCreated: Timestamp;
+  username: string;
+  email: string;
+  name: string;
+  numComments: number;
+  numPosts: number;
+}
+
 const PostFeed: React.FC = () => {
   const { currentUser } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
@@ -73,6 +82,13 @@ const PostFeed: React.FC = () => {
       };
 
       await addDoc(collection(firestore, 'posts'), post);
+
+      // update user post count
+      const userRef = doc(firestore, 'users', currentUser.uid);
+      const userDoc = await getDoc(userRef);
+      const userData = userDoc.data() as User;
+      await updateDoc(userRef, {numPosts: userData.numPosts + 1});
+
       setNewPost('');
     } catch (err) {
       setError('Failed to create post');

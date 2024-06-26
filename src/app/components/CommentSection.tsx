@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, addDoc, query, orderBy, onSnapshot, updateDoc, doc, getDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, updateDoc, doc, getDoc, arrayUnion, arrayRemove, Timestamp } from 'firebase/firestore';
 import { firestore } from '../../lib/firebase';
 import { useAuth } from '../../context/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,6 +14,15 @@ interface Comment {
     dislikes: number;
     likedBy: string[];
     dislikedBy: string[];
+}
+
+interface User {
+    dateCreated: Timestamp;
+    username: string;
+    email: string;
+    name: string;
+    numComments: number;
+    numPosts: number;
 }
 
 const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
@@ -64,6 +73,13 @@ const CommentSection: React.FC<{ postId: string }> = ({ postId }) => {
             };
 
             await addDoc(collection(firestore, 'posts', postId, 'comments'), comment);
+            
+            // update user comment count
+            const userRef = doc(firestore, 'users', currentUser.uid);
+            const userDoc = await getDoc(userRef);
+            const userData = userDoc.data() as User;
+            await updateDoc(userRef, {numComments: userData.numComments + 1});
+            
             setNewComment('');
         } catch (err) {
             setError('Failed to add comment');
