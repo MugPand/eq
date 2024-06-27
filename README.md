@@ -18,7 +18,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 
 ## Feature TODOs
-- [ ] Add dashboard
+- [x] Add dashboard
 - [x] Add posts database
 - [ ] Add posting limits
 - [ ] Add post customizability
