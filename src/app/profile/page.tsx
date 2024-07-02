@@ -129,6 +129,7 @@ const Profile: React.FC = () => {
                   <li key={post.id} className="mb-4 p-4 border border-gray-300 rounded-md">
                     <h4 className="text-lg font-bold">{post.title}</h4>
                     <p>{post.content}</p>
+                    <p>Likes: {post.likes} | Dislikes: {post.dislikes}</p>
                   </li>
                 ))}
               </ul>
