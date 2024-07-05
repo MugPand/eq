@@ -1,4 +1,4 @@
-![EQ app](logo.png)
+<!-- ![EQ app](logo.png)
 
 Welcome to EQ, the Internet place for sharing emotions, getting advice, and connecting with humans!
 
@@ -32,4 +32,31 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 ## Bugs TODOs
 - [ ] Login works from root url, not from '/login'
 - [ ] Remember me button not working
-- [x] Firestore not storing additional user information
+- [x] Firestore not storing additional user information -->
+
+
+A simple social media template website. Build using Next.js, React, TypeScript, Tailwind, Firebase Authentication and Firebase Firestore.
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+pnpm run dev
+```
+
+or 
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx` or the respective `page.tsx` files in the associated page subdirectories. The page auto-updates as you edit the file.
+
+## Configuring Firebase
+
+
+## System Design
+

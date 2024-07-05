@@ -7,7 +7,7 @@
 .yarn/install-state.gz
 
 # firebase
-/src/firebase.ts
+/src/lib/firebase.ts
 
 # testing
 /coverage
