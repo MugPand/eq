@@ -33,9 +33,9 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 - [ ] Login works from root url, not from '/login'
 - [ ] Remember me button not working
 - [x] Firestore not storing additional user information -->
+## EQ
 
-
-A simple social media template website. Build using Next.js, React, TypeScript, Tailwind, Firebase Authentication and Firebase Firestore.
+A simple social media template website originally built to be a distraction-free social forum where users could chat about emotions, get advice, and connect with others. Built using Next.js, React, TypeScript, Tailwind, Firebase Authentication and Firebase Firestore.
 
 ## Getting Started
 
