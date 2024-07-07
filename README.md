@@ -33,7 +33,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 - [ ] Login works from root url, not from '/login'
 - [ ] Remember me button not working
 - [x] Firestore not storing additional user information -->
-## EQ
+# EQ
 
 A simple social media template website originally built to be a distraction-free social forum where users could chat about emotions, get advice, and connect with others. Built using Next.js, React, TypeScript, Tailwind, Firebase Authentication and Firebase Firestore.
 
@@ -54,6 +54,9 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx` or the respective `page.tsx` files in the associated page subdirectories. The page auto-updates as you edit the file.
+
+## Directory Structure
+Within the `src/` directory there are subdirectories associated with each page of the website i.e. `feed/`, `login/`, `profile/`. Within each subdir is a `page.tsx` that can be edited to modify the look and feel of each page.
 
 ## Configuring Firebase
 
