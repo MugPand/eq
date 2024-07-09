@@ -56,10 +56,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx` or the respective `page.tsx` files in the associated page subdirectories. The page auto-updates as you edit the file.
 
 ## Directory Structure
-Within the `src/` directory there are subdirectories associated with each page of the website i.e. `feed/`, `login/`, `profile/`. Within each subdir is a `page.tsx` that can be edited to modify the look and feel of each page.
+Within the `src/` directory there are subdirectories associated with each page of the website i.e. `feed/`, `login/`, `profile/`. Within each subdirectory is a `page.tsx` that can be edited to modify the look and feel of each page.
 
 ## Configuring Firebase
-
+When setting up Firebase to work correctly with this web application, ensure that the `lib/` directory contains the file `firebase.ts`. This file may need to be updated with the firebase keys associated with your project. The file also contains additional information regarding setting a global rememberMe persistence and exporting the global auth.
 
 ## System Design
+![System Design](system_design.png)
 
+1. First the Client actiavtes the global auth context by making a sign-in request to the Firebase Authentication server. If sign-in is successful the auth context is correctly populated, else a sign-in error is displayed.
+2. Using the global auth context, individual page actions can access data from the Firebase cloud firestores. This includes getting information such as user-info, posts, comments, etc..
