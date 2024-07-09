@@ -37,6 +37,8 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 A simple social media template website originally built to be a distraction-free social forum where users could chat about emotions, get advice, and connect with others. Built using Next.js, React, TypeScript, Tailwind, Firebase Authentication and Firebase Firestore.
 
+![EQ app](logo.png)
+
 ## Getting Started
 
 First, run the development server:
